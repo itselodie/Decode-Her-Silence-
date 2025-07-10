@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Decode Her Silence: Safe Chatbot</title>
+    <title>SafeChat: Trauma-Informed Support</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #8a2be2;
@@ -14,15 +15,18 @@
             --danger: #ff5252;
             --light: #f9f0ff;
             --dark: #3a0ca3;
+            --teal: #20B2AA;
+            --lavender: #E6E6FA;
+            --peach: #FFDAB9;
         }
-
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-
+        
         body {
             background: linear-gradient(135deg, #f5f7fa 0%, #e4e7f4 100%);
             min-height: 100vh;
@@ -31,7 +35,7 @@
             align-items: center;
             padding: 20px;
         }
-
+        
         .container {
             width: 100%;
             max-width: 900px;
@@ -43,7 +47,7 @@
             flex-direction: column;
             height: 90vh;
         }
-
+        
         .header {
             background: linear-gradient(90deg, var(--primary), var(--secondary));
             color: white;
@@ -51,7 +55,7 @@
             text-align: center;
             position: relative;
         }
-
+        
         .header h1 {
             font-size: 1.8rem;
             margin-bottom: 5px;
@@ -60,7 +64,7 @@
             justify-content: center;
             gap: 10px;
         }
-
+        
         .panic-btn {
             position: absolute;
             right: 20px;
@@ -76,13 +80,14 @@
             align-items: center;
             gap: 5px;
             transition: all 0.3s;
+            z-index: 10;
         }
-
+        
         .panic-btn:hover {
             background: #e00000;
             transform: scale(1.05);
         }
-
+        
         .chat-container {
             flex: 1;
             padding: 20px;
@@ -90,43 +95,61 @@
             display: flex;
             flex-direction: column;
             gap: 15px;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23f9f0ff"/><path d="M20,20 Q40,5 60,20 T100,20 Q80,40 60,20 T20,20Z" fill="%23e4d5f7" opacity="0.3"/></svg>');
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23f9f0ff"/><path d="M20,20 Q40,5 60,20 T100,20 Q80,40 60,20 T20,20Z" fill="%23e4d5f7" opacity="0.1"/></svg>');
+            position: relative;
         }
-
+        
+        .chat-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="5" fill="%23ff69b4" opacity="0.1"/><circle cx="80" cy="30" r="7" fill="%238a2be2" opacity="0.1"/><circle cx="50" cy="80" r="6" fill="%2340e0d0" opacity="0.1"/></svg>');
+            z-index: 0;
+        }
+        
         .message {
             max-width: 80%;
             padding: 15px;
             border-radius: 18px;
             animation: fadeIn 0.3s ease;
+            position: relative;
+            z-index: 2;
+            transition: transform 0.3s;
         }
-
+        
+        .message:hover {
+            transform: translateY(-2px);
+        }
+        
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
+        
         .bot-message {
-            background: linear-gradient(135deg, var(--light), #e6d9f7);
+            background: linear-gradient(135deg, var(--lavender), #e6d9f7);
             align-self: flex-start;
             border-bottom-left-radius: 5px;
             color: var(--dark);
             box-shadow: 0 3px 10px rgba(0,0,0,0.05);
         }
-
+        
         .user-message {
             background: linear-gradient(135deg, var(--primary), var(--dark));
             color: white;
             align-self: flex-end;
             border-bottom-right-radius: 5px;
         }
-
+        
         .options-container {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
             margin-top: 10px;
         }
-
+        
         .option-btn {
             background: rgba(138, 43, 226, 0.1);
             border: 2px solid var(--primary);
@@ -137,35 +160,39 @@
             transition: all 0.3s;
             font-weight: 500;
         }
-
+        
         .option-btn:hover {
             background: var(--primary);
             color: white;
+            transform: scale(1.05);
         }
-
+        
         .input-container {
             padding: 15px 20px;
             background: white;
             border-top: 1px solid #eee;
             display: flex;
             gap: 10px;
+            position: relative;
+            z-index: 5;
         }
-
+        
         #user-input {
             flex: 1;
-            padding: 15px;
+            padding: 15px 20px;
             border: 2px solid #e0e0e0;
             border-radius: 50px;
             outline: none;
             font-size: 1rem;
             transition: all 0.3s;
+            background: #fff;
         }
-
+        
         #user-input:focus {
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(138, 43, 226, 0.2);
         }
-
+        
         #send-btn {
             background: var(--primary);
             color: white;
@@ -180,12 +207,12 @@
             font-size: 1.2rem;
             transition: all 0.3s;
         }
-
+        
         #send-btn:hover {
             background: var(--secondary);
             transform: scale(1.05);
         }
-
+        
         .module-tag {
             display: inline-block;
             background: rgba(64, 224, 208, 0.2);
@@ -196,26 +223,35 @@
             margin-top: 8px;
             font-weight: bold;
         }
-
+        
         .resources-list {
             margin-top: 10px;
             padding-left: 20px;
         }
-
+        
         .resources-list li {
             margin-bottom: 8px;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
         }
-
+        
+        .resources-list li i {
+            margin-top: 4px;
+        }
+        
         .resources-list a {
             color: var(--primary);
             text-decoration: none;
             font-weight: 500;
+            transition: all 0.3s;
         }
-
+        
         .resources-list a:hover {
             text-decoration: underline;
+            color: var(--secondary);
         }
-
+        
         .consent-box {
             background: rgba(255, 255, 255, 0.9);
             border: 2px solid var(--safe);
@@ -223,13 +259,13 @@
             padding: 15px;
             margin-top: 10px;
         }
-
+        
         .consent-buttons {
             display: flex;
             gap: 10px;
             margin-top: 10px;
         }
-
+        
         .consent-btn {
             flex: 1;
             padding: 10px;
@@ -239,17 +275,25 @@
             cursor: pointer;
             transition: all 0.3s;
         }
-
+        
         .agree-btn {
             background: var(--safe);
             color: white;
         }
-
+        
+        .agree-btn:hover {
+            opacity: 0.9;
+        }
+        
         .decline-btn {
             background: #f0f0f0;
             color: #666;
         }
-
+        
+        .decline-btn:hover {
+            background: #e0e0e0;
+        }
+        
         .journal-textarea {
             width: 100%;
             height: 120px;
@@ -260,14 +304,20 @@
             resize: none;
             font-family: inherit;
             font-size: 1rem;
+            transition: all 0.3s;
         }
-
+        
+        .journal-textarea:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(64, 224, 208, 0.2);
+        }
+        
         .journal-options {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
         }
-
+        
         .journal-option {
             background: rgba(255, 105, 180, 0.1);
             border: 2px solid var(--secondary);
@@ -277,12 +327,13 @@
             cursor: pointer;
             transition: all 0.3s;
         }
-
+        
         .journal-option:hover {
             background: var(--secondary);
             color: white;
+            transform: scale(1.05);
         }
-
+        
         .safety-note {
             background: rgba(255, 82, 82, 0.08);
             border-left: 4px solid var(--danger);
@@ -290,39 +341,433 @@
             border-radius: 0 8px 8px 0;
             margin: 15px 0;
             font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-
+        
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            background: var(--lavender);
+            border-radius: 18px;
+            width: 60px;
+            margin-top: 5px;
+        }
+        
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            margin: 0 2px;
+            animation: typing 1.4s infinite;
+        }
+        
+        .typing-dot:nth-child(1) { animation-delay: 0s; }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-5px); }
+        }
+        
+        .language-selector {
+            position: absolute;
+            left: 20px;
+            top: 20px;
+            display: flex;
+            gap: 5px;
+            z-index: 10;
+        }
+        
+        .lang-btn {
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+        }
+        
+        .lang-btn:hover, .lang-btn.active {
+            background: white;
+            color: var(--primary);
+        }
+        
+        .bot-avatar {
+            position: absolute;
+            left: 20px;
+            top: 60px;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            z-index: 10;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .report-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .report-input {
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+        
+        .report-input:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        
+        .submit-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .submit-btn:hover {
+            background: var(--secondary);
+        }
+        
+        .emergency-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .emergency-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: rgba(255, 82, 82, 0.1);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .emergency-option:hover {
+            background: rgba(255, 82, 82, 0.2);
+        }
+        
+        .faq-container {
+            margin-top: 15px;
+        }
+        
+        .faq-item {
+            margin-bottom: 15px;
+            padding: 15px;
+            background: rgba(138, 43, 226, 0.05);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .faq-item:hover {
+            background: rgba(138, 43, 226, 0.1);
+        }
+        
+        .faq-question {
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .faq-answer {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(0,0,0,0.1);
+            display: none;
+        }
+        
+        .faq-item.active .faq-answer {
+            display: block;
+        }
+        
+        .bot-intro {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .bot-name {
+            font-weight: bold;
+            color: var(--secondary);
+        }
+        
+        .bot-tagline {
+            font-style: italic;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .healing-space {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, #87CEEB, #E0F7FA);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: opacity 0.5s;
+            display: none;
+            opacity: 0;
+        }
+        
+        .space-title {
+            font-size: 2rem;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+        }
+        
+        .space-content {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 600px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .space-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--danger);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+        
+        .affirmation {
+            font-size: 1.2rem;
+            margin: 20px 0;
+            font-style: italic;
+            color: var(--dark);
+        }
+        
+        .breathing-exercise {
+            margin: 20px 0;
+        }
+        
+        .breath-circle {
+            width: 150px;
+            height: 150px;
+            background: var(--accent);
+            border-radius: 50%;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            animation: breathe 8s infinite;
+        }
+        
+        @keyframes breathe {
+            0%, 100% { transform: scale(0.8); background: var(--accent); }
+            25% { transform: scale(1.2); background: var(--teal); }
+            50% { transform: scale(0.8); background: var(--accent); }
+            75% { transform: scale(1.2); background: var(--teal); }
+        }
+        
+        .healing-button {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 10px;
+        }
+        
+        .healing-button:hover {
+            background: var(--primary);
+            transform: scale(1.05);
+        }
+        
+        .progress-container {
+            width: 100%;
+            background: #e0e0e0;
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background: var(--secondary);
+            border-radius: 10px;
+            transition: width 0.5s;
+        }
+        
+        .progress-text {
+            text-align: center;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            color: var(--dark);
+        }
+        
+        .encouragement {
+            padding: 10px;
+            background: rgba(255, 105, 180, 0.1);
+            border-radius: 10px;
+            margin: 10px 0;
+            font-style: italic;
+            color: var(--secondary);
+            text-align: center;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.7; }
+            50% { opacity: 1; }
+            100% { opacity: 0.7; }
+        }
+        
+        .user-name {
+            font-weight: bold;
+            color: var(--secondary);
+        }
+        
         @media (max-width: 600px) {
             .container {
                 height: 95vh;
                 border-radius: 15px;
             }
-
+            
             .message {
                 max-width: 90%;
             }
-
+            
             .header h1 {
                 font-size: 1.4rem;
                 padding-right: 60px;
+            }
+            
+            .language-selector {
+                top: 10px;
+                left: 10px;
+            }
+            
+            .bot-avatar {
+                top: 50px;
+                left: 10px;
+                width: 35px;
+                height: 35px;
+                font-size: 0.9rem;
+            }
+            
+            .panic-btn {
+                top: 10px;
+                right: 10px;
+                padding: 6px 12px;
+                font-size: 0.9rem;
+            }
+            
+            .input-container {
+                padding: 10px 15px;
+            }
+            
+            .healing-space .space-content {
+                padding: 20px;
+                margin: 0 15px;
+            }
+            
+            .breath-circle {
+                width: 120px;
+                height: 120px;
             }
         }
     </style>
 </head>
 <body>
+    <div class="healing-space" id="healing-space">
+        <button class="space-close" id="close-space"><i class="fas fa-times"></i></button>
+        <h1 class="space-title">Your Healing Sanctuary</h1>
+        <div class="space-content">
+            <p>Welcome to your safe space. Breathe deeply and find your center.</p>
+            
+            <div class="breathing-exercise">
+                <div class="breath-circle">Breathe</div>
+                <p>Follow the circle - breathe in as it grows, breathe out as it shrinks</p>
+            </div>
+            
+            <div class="affirmation" id="affirmation">
+                "You are stronger than you know, braver than you feel, and more loved than you imagine."
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar" style="width: 30%"></div>
+            </div>
+            <div class="progress-text">Healing Progress: 30%</div>
+            
+            <button class="healing-button" id="new-affirmation"><i class="fas fa-sync"></i> New Affirmation</button>
+            <button class="healing-button" id="guided-meditation"><i class="fas fa-headphones"></i> Play Meditation</button>
+            <button class="healing-button" id="journal-here"><i class="fas fa-book"></i> Journal Here</button>
+        </div>
+    </div>
+    
     <div class="container">
         <div class="header">
-            <h1><i class="fas fa-dove"></i> Decode Her Silence: Safe Chatbot</h1>
-            <p>Trauma-informed support for gender-based violence</p>
+            <div class="language-selector">
+                <button class="lang-btn active" data-lang="en">EN</button>
+                <button class="lang-btn" data-lang="hi">HI</button>
+                <button class="lang-btn" data-lang="ur">UR</button>
+                <button class="lang-btn" data-lang="bn">BN</button>
+            </div>
+            
+            <div class="bot-avatar">S</div>
+            
+            <h1><i class="fas fa-dove"></i> SafeChat: Trauma Support</h1>
+            <p>Confidential support for gender-based violence survivors</p>
             <button class="panic-btn" id="panic-btn">
                 <i class="fas fa-shield-alt"></i> Panic Button
             </button>
         </div>
-
+        
         <div class="chat-container" id="chat-container">
+            <div class="chat-background"></div>
             <!-- Messages will appear here dynamically -->
         </div>
-
+        
         <div class="input-container">
             <input type="text" id="user-input" placeholder="Type your message...">
             <button id="send-btn">
@@ -332,11 +777,13 @@
     </div>
 
     <script>
-        // Chatbot state and configuration
+        // Enhanced chatbot with all requested features
         const chatbotConfig = {
             userName: "Friend",
+            userNickname: "",
             currentModule: "welcome",
             journalEntry: "",
+            language: "en",
             resources: [
                 {name: "National Commission for Women Helpline", number: "7827170170"},
                 {name: "SAFECITY", link: "https://safecity.in"},
@@ -345,6 +792,8 @@
                 {name: "Emergency Police", number: "100"},
                 {name: "Women Helpline", number: "1091"},
                 {name: "Cyber Crime Cell", number: "1930"},
+                {name: "Mental Health Helpline", number: "1800-599-0019"},
+                {name: "Child Helpline", number: "1098"}
             ],
             educationalTopics: [
                 "Understanding digital abuse",
@@ -354,6 +803,39 @@
                 "Your legal rights in India",
                 "Patriarchy in online spaces",
                 "Mental health self-care"
+            ],
+            faqs: [
+                {
+                    question: "What should I do if someone shares my private photos without consent?",
+                    answer: "This is a form of digital abuse. Take screenshots as evidence, report to the platform, and contact cyber crime authorities (1930). The IT Act Section 66E provides legal protection."
+                },
+                {
+                    question: "How can I protect myself from online harassment?",
+                    answer: "1. Adjust privacy settings 2. Block harassers 3. Don't share personal info 4. Use strong passwords 5. Report abusive behavior to platforms"
+                },
+                {
+                    question: "Is cyberstalking illegal in India?",
+                    answer: "Yes, IPC Section 354D makes cyberstalking a criminal offense with punishment up to 5 years. Save evidence and report to cyber cell immediately."
+                },
+                {
+                    question: "How can I support a friend facing abuse?",
+                    answer: "1. Listen without judgment 2. Believe their experience 3. Offer resources 4. Respect their decisions 5. Help them create a safety plan"
+                }
+            ],
+            encouragements: [
+                "You're showing such courage by reaching out 💜",
+                "Take your time, I'm here for you whenever you're ready 🌸",
+                "Your feelings are completely valid and important 🌈",
+                "You are stronger than you know, and you're not alone 💪",
+                "Every step you take towards healing matters 🌻"
+            ],
+            affirmations: [
+                "I am worthy of respect and safety",
+                "My voice matters and I deserve to be heard",
+                "I am stronger than my fears",
+                "I trust my instincts and protect my boundaries",
+                "I am not defined by what happened to me",
+                "Healing is a journey and I'm moving forward"
             ]
         };
 
@@ -362,15 +844,111 @@
         const userInput = document.getElementById('user-input');
         const sendBtn = document.getElementById('send-btn');
         const panicBtn = document.getElementById('panic-btn');
+        const healingSpace = document.getElementById('healing-space');
+        const closeSpace = document.getElementById('close-space');
+        const newAffirmation = document.getElementById('new-affirmation');
+        const affirmationText = document.getElementById('affirmation');
+        const progressBar = document.getElementById('progress-bar');
 
-        // Initial bot message
-        setTimeout(() => {
-            showBotMessage("Hello dear friend! I'm your Safe Chatbot. 🌸 Before we begin, I want you to know:", "welcome");
+        // Show bot message
+        function showBotMessage(text, module) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message bot-message';
+            messageDiv.innerHTML = text;
+            
+            if (module) {
+                const moduleTag = document.createElement('div');
+                moduleTag.className = 'module-tag';
+                moduleTag.textContent = module;
+                messageDiv.appendChild(moduleTag);
+            }
+            
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        // Show bot message with HTML content
+        function showBotMessageWithHTML(html, module) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message bot-message';
+            messageDiv.innerHTML = html;
+            
+            if (module) {
+                const moduleTag = document.createElement('div');
+                moduleTag.className = 'module-tag';
+                moduleTag.textContent = module;
+                messageDiv.appendChild(moduleTag);
+            }
+            
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        // Show navigation options
+        function showNavigationOptions() {
+            const optionsHTML = `
+                <div class="options-container">
+                    <button class="option-btn" id="back-to-menu">← Main Menu</button>
+                    <button class="option-btn" id="exit-chat">Exit Chat</button>
+                </div>
+            `;
+            
+            showBotMessageWithHTML(optionsHTML, "navigation");
+            
+            document.getElementById('back-to-menu').addEventListener('click', () => {
+                chatbotConfig.currentModule = "main-menu";
+                showMainMenu();
+            });
+            
+            document.getElementById('exit-chat').addEventListener('click', () => {
+                showBotMessage("Thank you for chatting. Remember, you're not alone. You can return anytime.", "exit");
+                disableInput();
+            });
+        }
+
+        // Disable user input
+        function disableInput() {
+            userInput.disabled = true;
+            sendBtn.disabled = true;
+            userInput.placeholder = "Chat ended";
+        }
+
+        // Show educational content
+        function showEducationalContent(topic) {
+            let content = "";
+            
+            if (topic === "Understanding digital abuse") {
+                content = "Digital abuse includes: non-consensual image sharing, cyberstalking, online harassment, and digital surveillance. Remember: You have the right to digital privacy and safety.";
+            } else if (topic === "Consent in relationships") {
+                content = "Consent must be freely given, reversible, informed, enthusiastic, and specific. Without consent, any action is a violation of boundaries and trust.";
+            } else if (topic === "Recognizing red flags") {
+                content = "Red flags include: controlling behavior, isolation from friends/family, excessive jealousy, verbal abuse, threats, and pressure to share intimate content.";
+            } else {
+                content = `Learn more about ${topic}: This content would provide detailed information about the selected topic.`;
+            }
+            
+            showBotMessage(content, "learn");
+            showNavigationOptions();
+        }
+
+        // Initialize chatbot
+        function initChatbot() {
             setTimeout(() => {
-                showBotMessage("1. This is a safe, confidential space<br>2. You're in control - share only what feels comfortable<br>3. I won't store any personal data<br>4. We can stop anytime with the panic button", "welcome");
-                showConsentBox();
-            }, 1000);
-        }, 500);
+                showBotMessage(`Hello dear friend! I'm SafeChat, your trauma-informed support chatbot. 💜 Before we begin:`, "welcome");
+                showBotMessage(`1. This is a confidential space<br>2. You're in control - share only what feels comfortable<br>3. I won't store personal data<br>4. Use the panic button anytime for safety`, "welcome");
+                
+                // Random encouragement
+                if (Math.random() > 0.5) {
+                    setTimeout(() => {
+                        showEncouragement();
+                    }, 1500);
+                }
+                
+                setTimeout(() => {
+                    showConsentBox();
+                }, 1000);
+            }, 500);
+        }
 
         // Show consent box
         function showConsentBox() {
@@ -383,51 +961,76 @@
                     </div>
                 </div>
             `;
-
-            const messageDiv = document.createElement('div');
-            messageDiv.className = 'message bot-message';
-            messageDiv.innerHTML = consentHTML;
-            chatContainer.appendChild(messageDiv);
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-
+            
+            showBotMessageWithHTML(consentHTML, "welcome");
+            
             document.getElementById('agree-btn').addEventListener('click', () => {
-                chatbotConfig.currentModule = "main-menu";
-                showMainMenu();
+                askForNickname();
             });
-
+            
             document.getElementById('decline-btn').addEventListener('click', () => {
                 showBotMessage("I completely understand. You're always welcome back whenever you feel ready. Remember, you're not alone. 💜", "welcome");
                 disableInput();
             });
         }
 
+        // Ask for nickname
+        function askForNickname() {
+            showBotMessage("Would you like me to call you by a special name? It might help our conversation feel more personal 🌸", "personalize");
+            
+            const nicknameHTML = `
+                <div class="options-container">
+                    <button class="option-btn" id="yes-nickname">Yes, please!</button>
+                    <button class="option-btn" id="no-nickname">No, thanks</button>
+                </div>
+            `;
+            
+            showBotMessageWithHTML(nicknameHTML, "personalize");
+            
+            document.getElementById('yes-nickname').addEventListener('click', () => {
+                showBotMessage("Wonderful! What name would you like me to use? You can change it anytime.", "personalize");
+                chatbotConfig.currentModule = "set-nickname";
+            });
+            
+            document.getElementById('no-nickname').addEventListener('click', () => {
+                showBotMessage("No problem at all! I'll call you 'Friend' - because that's what I hope to be for you. 💛", "personalize");
+                setTimeout(() => {
+                    chatbotConfig.currentModule = "main-menu";
+                    showMainMenu();
+                }, 1000);
+            });
+        }
+
         // Show main menu options
         function showMainMenu() {
-            showBotMessage("How would you like to proceed today? Choose what feels right for you:", "main-menu");
-
+            const name = chatbotConfig.userNickname || "Friend";
+            showBotMessage(`Hi${name ? ' ' + name : ''}! 💖 How would you like to proceed today? Choose what feels right:`, "main-menu");
+            
             const optionsHTML = `
                 <div class="options-container">
                     <button class="option-btn" data-module="help">🆘 I need help</button>
                     <button class="option-btn" data-module="learn">📖 I want to learn</button>
                     <button class="option-btn" data-module="speak">🗣️ I want to speak up</button>
-                    <button class="option-btn" data-module="report">📋 I want to report</button>
-                    <button class="option-btn" data-module="vent">🌺 I just want to vent</button>
+                    <button class="option-btn" data-module="report">📋 Report abuse</button>
+                    <button class="option-btn" data-module="vent">🌺 I need to vent</button>
+                    <button class="option-btn" data-module="resources">📚 Resource center</button>
+                    <button class="option-btn" id="healing-space-btn">🌌 Healing space</button>
                 </div>
             `;
-
-            const messageDiv = document.createElement('div');
-            messageDiv.className = 'message bot-message';
-            messageDiv.innerHTML = optionsHTML;
-            chatContainer.appendChild(messageDiv);
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-
+            
+            showBotMessageWithHTML(optionsHTML, "main-menu");
+            
             // Add event listeners to option buttons
-            document.querySelectorAll('.option-btn').forEach(button => {
+            document.querySelectorAll('.option-btn[data-module]').forEach(button => {
                 button.addEventListener('click', (e) => {
                     const module = e.target.getAttribute('data-module');
                     chatbotConfig.currentModule = module;
                     handleModuleSelection(module);
                 });
+            });
+            
+            document.getElementById('healing-space-btn').addEventListener('click', () => {
+                showHealingSpace();
             });
         }
 
@@ -441,7 +1044,8 @@
                     showLearnModule();
                     break;
                 case "speak":
-                    showSpeakModule();
+                    showBotMessage("Your voice matters. Would you like help preparing what to say?", "speak");
+                    setTimeout(() => showNavigationOptions(), 1000);
                     break;
                 case "report":
                     showReportModule();
@@ -449,27 +1053,34 @@
                 case "vent":
                     showVentModule();
                     break;
+                case "resources":
+                    showResourcesModule();
+                    break;
+                default:
+                    showMainMenu();
             }
         }
 
         // Help Module
         function showHelpModule() {
-            showBotMessage("I'm here to support you. Please know that whatever you're facing, you don't deserve it and you're not alone. What kind of help do you need most right now?", "help");
-
+            const name = chatbotConfig.userNickname || "Friend";
+            showBotMessage(`I'm here for you${name ? ' ' + name : ''}. Whatever you're facing, you don't deserve it and you're not alone. What support do you need?`, "help");
+            
             const optionsHTML = `
                 <div class="safety-note">
-                    <i class="fas fa-exclamation-circle"></i> If you're in immediate danger, please contact local authorities first
+                    <i class="fas fa-exclamation-circle"></i> If you're in immediate danger, please contact authorities first
                 </div>
                 <div class="options-container">
                     <button class="option-btn" data-type="mental">Mental health support</button>
                     <button class="option-btn" data-type="legal">Legal information</button>
                     <button class="option-btn" data-type="ngo">Connect with NGOs</button>
                     <button class="option-btn" data-type="safety">Safety planning</button>
+                    <button class="option-btn" id="emergency-sms">🚨 Send emergency alert</button>
                 </div>
             `;
-
+            
             showBotMessageWithHTML(optionsHTML, "help");
-
+            
             // Add event listeners
             document.querySelectorAll('.option-btn[data-type]').forEach(btn => {
                 btn.addEventListener('click', (e) => {
@@ -477,197 +1088,369 @@
                     showHelpResources(helpType);
                 });
             });
+            
+            document.getElementById('emergency-sms').addEventListener('click', () => {
+                showEmergencyOptions();
+            });
         }
 
         function showHelpResources(type) {
             let resourcesHTML = "<h4>Here are resources that might help:</h4><ul class='resources-list'>";
-
+            
             if (type === "mental") {
                 resourcesHTML += `
-                    <li><i class="fas fa-phone-alt"></i> <strong>Vandrevala Foundation Helpline:</strong> 9999666555</li>
+                    <li><i class="fas fa-phone-alt"></i> <strong>Vandrevala Foundation:</strong> 9999666555</li>
                     <li><i class="fas fa-globe"></i> <a href="https://www.thelivelovelaughfoundation.org" target="_blank">Live Love Laugh Foundation</a></li>
                     <li><i class="fas fa-mobile-alt"></i> <strong>iCall Helpline:</strong> 9152987821</li>
+                    <li><i class="fas fa-heart"></i> <strong>Mental Health Helpline:</strong> 1800-599-0019</li>
                 `;
             } else if (type === "legal") {
                 resourcesHTML += `
-                    <li><i class="fas fa-gavel"></i> <strong>Domestic Violence Act (2005)</strong> - Protection from physical/emotional abuse</li>
+                    <li><i class="fas fa-gavel"></i> <strong>Domestic Violence Act (2005)</strong> - Protection from abuse</li>
                     <li><i class="fas fa-gavel"></i> <strong>IT Act Section 66E</strong> - Punishment for voyeurism</li>
                     <li><i class="fas fa-gavel"></i> <strong>IPC 354D</strong> - Stalking is a criminal offense</li>
                     <li><i class="fas fa-gavel"></i> <strong>POCSO Act</strong> - Protection for minors</li>
+                    <li><i class="fas fa-gavel"></i> <strong>Section 509</strong> - Word/gesture intended to insult modesty</li>
                 `;
             } else if (type === "ngo") {
                 resourcesHTML += `
                     <li><i class="fas fa-hands-helping"></i> <a href="https://safecity.in" target="_blank">SAFECITY</a> - Report harassment anonymously</li>
-                    <li><i class="fas fa-hands-helping"></i> <a href="https://inbreakthrough.org" target="_blank">Breakthrough India</a> - Ending gender-based violence</li>
-                    <li><i class="fas fa-hands-helping"></i> <a href="https://www.rahifoundation.org" target="_blank">RAHI Foundation</a> - Support for survivors</li>
+                    <li><i class="fas fa-hands-helping"></i> <a href="https://inbreakthrough.org" target="_blank">Breakthrough India</a></li>
+                    <li><i class="fas fa-hands-helping"></i> <a href="https://www.rahifoundation.org" target="_blank">RAHI Foundation</a></li>
+                    <li><i class="fas fa-hands-helping"></i> <a href="https://www.majlislegal.org" target="_blank">Majlis Legal Centre</a></li>
                 `;
             } else {
                 resourcesHTML += `
-                    <li>Trust your instincts - if something feels unsafe, remove yourself if possible</li>
-                    <li>Identify safe spaces and people in your life</li>
-                    <li>Keep important numbers on speed dial</li>
-                    <li>Develop a code word with trusted friends</li>
+                    <li><i class="fas fa-lightbulb"></i> Trust your instincts - remove yourself if unsafe</li>
+                    <li><i class="fas fa-map-marker-alt"></i> Identify safe spaces and people</li>
+                    <li><i class="fas fa-phone"></i> Keep emergency numbers on speed dial</li>
+                    <li><i class="fas fa-code"></i> Develop a code word with trusted friends</li>
+                    <li><i class="fas fa-passport"></i> Keep important documents accessible</li>
                 `;
             }
-
+            
             resourcesHTML += "</ul>";
             showBotMessageWithHTML(resourcesHTML, "help");
             showBotMessage("Would you like to explore another resource or return to the main menu?", "help");
             showNavigationOptions();
         }
 
-        // Learn Module
+        // Emergency SMS feature
+        function showEmergencyOptions() {
+            showBotMessage("This will send an emergency message with your location to trusted contacts. Choose an option:", "emergency");
+            
+            const optionsHTML = `
+                <div class="emergency-options">
+                    <div class="emergency-option" id="sms-option">
+                        <i class="fas fa-sms"></i>
+                        <div>
+                            <strong>Send SMS</strong>
+                            <p>Text message to your emergency contacts</p>
+                        </div>
+                    </div>
+                    <div class="emergency-option" id="email-option">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <strong>Send Email</strong>
+                            <p>Email alert to your support network</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            showBotMessageWithHTML(optionsHTML, "emergency");
+            
+            document.getElementById('sms-option').addEventListener('click', () => {
+                // In a real implementation, this would use the SMS API
+                showBotMessage("📱 SMS would be sent to your emergency contacts with your location and a help request. For your safety, please confirm with 'SEND'", "emergency");
+                chatbotConfig.currentModule = "confirm-sms";
+            });
+            
+            document.getElementById('email-option').addEventListener('click', () => {
+                // In a real implementation, this would use the Email API
+                showBotMessage("✉️ Email would be sent to your emergency contacts. For your safety, please confirm with 'SEND'", "emergency");
+                chatbotConfig.currentModule = "confirm-email";
+            });
+        }
+
+        // Report Module
+        function showReportModule() {
+            const name = chatbotConfig.userNickname || "Friend";
+            showBotMessage(`${name ? name + ', ' : ''}You're being incredibly brave by reporting this. 🌸 All reports are anonymous. What would you like to report?`, "report");
+            
+            const reportHTML = `
+                <div class="report-form">
+                    <select class="report-input" id="report-type">
+                        <option value="">Select type of incident</option>
+                        <option value="harassment">Online harassment</option>
+                        <option value="stalking">Stalking</option>
+                        <option value="image">Non-consensual image sharing</option>
+                        <option value="threat">Threats or intimidation</option>
+                        <option value="other">Other</option>
+                    </select>
+                    
+                    <textarea class="report-input" id="report-details" placeholder="Describe what happened (date, time, platform, etc.)" rows="3"></textarea>
+                    
+                    <div class="options-container">
+                        <button class="option-btn" id="add-screenshot"><i class="fas fa-camera"></i> Add Screenshot</button>
+                    </div>
+                    
+                    <button class="submit-btn" id="submit-report">Submit Anonymously</button>
+                </div>
+                
+                <div class="safety-note">
+                    <i class="fas fa-lock"></i> Your report is completely anonymous. No personal information is collected.
+                </div>
+            `;
+            
+            showBotMessageWithHTML(reportHTML, "report");
+            
+            document.getElementById('add-screenshot').addEventListener('click', () => {
+                // In a real app, this would open file selection
+                showBotMessage("📸 For your safety, we recommend blurring any identifying information before uploading screenshots.", "report");
+            });
+            
+            document.getElementById('submit-report').addEventListener('click', () => {
+                const reportType = document.getElementById('report-type').value;
+                const details = document.getElementById('report-details').value;
+                
+                if (!reportType || !details) {
+                    showBotMessage("Please fill in all fields before submitting.", "report");
+                    return;
+                }
+                
+                // In a real app, this would send to a secure database
+                showBotMessage("🚀 Your report has been submitted anonymously. Thank you for speaking up - this helps make spaces safer for everyone.", "report");
+                showBotMessage("Would you like to be connected with support resources?", "report");
+                showNavigationOptions();
+            });
+        }
+
+        // Learn Module with FAQ
         function showLearnModule() {
             showBotMessage("Knowledge is power. What would you like to understand better today?", "learn");
-
+            
             let topicsHTML = "<div class='options-container'>";
             chatbotConfig.educationalTopics.forEach(topic => {
                 topicsHTML += `<button class="option-btn" data-topic="${topic}">${topic}</button>`;
             });
             topicsHTML += "</div>";
-
+            
+            // Add FAQ section
+            topicsHTML += `
+                <div class="faq-container">
+                    <h4>Frequently Asked Questions:</h4>
+                    ${chatbotConfig.faqs.map((faq, index) => `
+                        <div class="faq-item" id="faq-${index}">
+                            <div class="faq-question">
+                                ${faq.question}
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">${faq.answer}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            
             showBotMessageWithHTML(topicsHTML, "learn");
-
+            
+            // Add event listeners for topics
             document.querySelectorAll('.option-btn[data-topic]').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     const topic = e.target.getAttribute('data-topic');
                     showEducationalContent(topic);
                 });
             });
+            
+            // Add event listeners for FAQs
+            chatbotConfig.faqs.forEach((_, index) => {
+                document.getElementById(`faq-${index}`).addEventListener('click', function() {
+                    this.classList.toggle('active');
+                });
+            });
         }
-
-        function showEducationalContent(topic) {
-            let content = "";
-
-            if (topic === "Understanding digital abuse") {
-                content = `
-                    <h4>Digital Abuse Explained</h4>
-                    <p>Digital abuse includes:</p>
-                    <ul>
-                        <li>Non-consensual sharing of intimate images</li>
-                        <li>Cyberstalking and harassment</li>
-                        <li>Monitoring/controlling your online activities</li>
-                        <li>Threatening messages or humiliation online</li>
-                    </ul>
-                    <p><strong>Remember:</strong> You have the right to digital autonomy. IT Act Section 66E and 67 provide legal protection.</p>
-                `;
-            } else if (topic === "Consent in relationships") {
-                content = `
-                    <h4>Consent is Fundamental</h4>
-                    <p>Consent must be:</p>
-                    <ul>
-                        <li><strong>Freely given</strong> without pressure</li>
-                        <li><strong>Reversible</strong> - can be withdrawn anytime</li>
-                        <li><strong>Informed</strong> - with full understanding</li>
-                        <li><strong>Enthusiastic</strong> - not just the absence of "no"</li>
-                        <li><strong>Specific</strong> - applies only to agreed activities</li>
-                    </ul>
-                    <p>Consent isn't just about physical intimacy - it applies to digital sharing, photos, and all aspects of relationships.</p>
-                `;
-            } else {
-                content = `
-                    <h4>${topic}</h4>
-                    <p>I'll provide detailed information on this topic in the full implementation. For now, know that you have rights and support available.</p>
-                `;
-            }
-
-            showBotMessageWithHTML(content, "learn");
-            showBotMessage("Would you like to learn about another topic?", "learn");
-            showNavigationOptions();
-        }
-
-        // Other module functions would follow similar patterns
-        // For brevity, we'll show the structure for one more module
 
         // Vent Module
         function showVentModule() {
-            showBotMessage("This is your safe space to express anything that's on your heart. I'm listening without judgment. Take your time...", "vent");
-            showBotMessage("You might start with: \"I feel...\" or \"What's hard is...\" or just share whatever comes to mind.", "vent");
-
-            // This module would normally have more sophisticated listening patterns
-            // In this prototype, we'll respond empathetically to any input
+            const name = chatbotConfig.userNickname || "Friend";
+            showBotMessage(`${name ? name + ', ' : ''}this is your safe space. I'm here to listen without judgment. 💜 Take your time...`, "vent");
+            showBotMessage("You might start with: \"I feel...\" or \"What's hard is...\" or anything on your heart.", "vent");
+            
+            // Show random encouragement
+            setTimeout(() => {
+                if (Math.random() > 0.7) {
+                    showEncouragement();
+                }
+            }, 3000);
         }
 
-        // Journaling Module
-        function showJournalModule() {
-            showBotMessage("Your words have power. This is your private space to write, reflect, and heal.", "journal");
-
-            const journalHTML = `
-                <textarea class="journal-textarea" placeholder="Express your thoughts, feelings, or experiences freely..." id="journal-entry"></textarea>
-                <p>What would you like to do with this entry?</p>
-                <div class="journal-options">
-                    <button class="journal-option" id="save-private">Keep Private</button>
-                    <button class="journal-option" id="share-anonymously">Share Anonymously</button>
-                    <button class="journal-option" id="save-for-later">Save for Later</button>
-                </div>
-            `;
-
-            showBotMessageWithHTML(journalHTML, "journal");
-
-            // Add event listeners
-            document.getElementById('save-private').addEventListener('click', () => {
-                chatbotConfig.journalEntry = document.getElementById('journal-entry').value;
-                showBotMessage("Your thoughts are safely stored only in this session. They will not be saved after you leave.", "journal");
-                showNavigationOptions();
-            });
-
-            // Other journal options would have their implementations
-        }
-
-        // Navigation helper
-        function showNavigationOptions() {
-            const navHTML = `
+        // Resources Center
+        function showResourcesModule() {
+            showBotMessage("Here's a collection of resources that might be helpful:", "resources");
+            
+            const resourcesHTML = `
                 <div class="options-container">
-                    <button class="option-btn" id="back-to-main">Back to Main Menu</button>
-                    <button class="option-btn" id="end-chat">End Conversation</button>
+                    <button class="option-btn" data-resource="helplines">📞 Helplines</button>
+                    <button class="option-btn" data-resource="legal">⚖️ Legal Rights</button>
+                    <button class="option-btn" data-resource="selfdefense">🥋 Self-Defense</button>
+                    <button class="option-btn" data-resource="mentalhealth">🧠 Mental Health</button>
                 </div>
             `;
-
-            showBotMessageWithHTML(navHTML, "navigation");
-
-            document.getElementById('back-to-main').addEventListener('click', () => {
-                chatbotConfig.currentModule = "main-menu";
-                showMainMenu();
-            });
-
-            document.getElementById('end-chat').addEventListener('click', () => {
-                showBotMessage("Thank you for trusting me with your time today. Remember, you are stronger than you know, and your voice matters. 🌸 Come back anytime you need support.", "end");
-                disableInput();
+            
+            showBotMessageWithHTML(resourcesHTML, "resources");
+            
+            document.querySelectorAll('.option-btn[data-resource]').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const resource = e.target.getAttribute('data-resource');
+                    showResourceContent(resource);
+                });
             });
         }
+        
+        function showResourceContent(type) {
+            let content = "";
+            
+            if (type === "helplines") {
+                content = `
+                    <h4>Emergency Helplines:</h4>
+                    <ul class="resources-list">
+                        <li><i class="fas fa-phone"></i> <strong>Women Helpline:</strong> 1091</li>
+                        <li><i class="fas fa-phone"></i> <strong>Police:</strong> 100</li>
+                        <li><i class="fas fa-phone"></i> <strong>Cyber Crime:</strong> 1930</li>
+                        <li><i class="fas fa-phone"></i> <strong>Child Helpline:</strong> 1098</li>
+                        <li><i class="fas fa-phone"></i> <strong>Domestic Abuse:</strong> 181</li>
+                    </ul>
+                `;
+            } else if (type === "legal") {
+                content = `
+                    <h4>Legal Rights in India:</h4>
+                    <ul class="resources-list">
+                        <li><i class="fas fa-gavel"></i> <strong>IPC 354D:</strong> Stalking (punishable by 3-5 years)</li>
+                        <li><i class="fas fa-gavel"></i> <strong>IT Act 66E:</strong> Privacy violation (3 years + fine)</li>
+                        <li><i class="fas fa-gavel"></i> <strong>POCSO Act:</strong> Protection of Children from Sexual Offences</li>
+                        <li><i class="fas fa-gavel"></i> <strong>Domestic Violence Act:</strong> Protection from physical/emotional abuse</li>
+                        <li><i class="fas fa-gavel"></i> <strong>Section 509:</strong> Insulting modesty (1 year + fine)</li>
+                    </ul>
+                `;
+            } else if (type === "selfdefense") {
+                content = `
+                    <h4>Self-Defense Resources:</h4>
+                    <ul class="resources-list">
+                        <li><i class="fab fa-youtube"></i> <a href="https://www.youtube.com/watch?v=example1" target="_blank">Basic Self-Defense Moves</a></li>
+                        <li><i class="fab fa-youtube"></i> <a href="https://www.youtube.com/watch?v=example2" target="_blank">Situational Awareness Training</a></li>
+                        <li><i class="fas fa-globe"></i> <a href="https://www.selfdefenseforall.com" target="_blank">Self-Defense For All</a></li>
+                        <li><i class="fas fa-map-marker-alt"></i> <strong>Local Workshops:</strong> Check with women's police stations or NGOs</li>
+                    </ul>
+                `;
+            } else {
+                content = `
+                    <h4>Mental Health Support:</h4>
+                    <ul class="resources-list">
+                        <li><i class="fas fa-phone"></i> <strong>Vandrevala Foundation:</strong> 9999666555</li>
+                        <li><i class="fas fa-phone"></i> <strong>iCall:</strong> 9152987821</li>
+                        <li><i class="fas fa-globe"></i> <a href="https://www.thelivelovelaughfoundation.org" target="_blank">Live Love Laugh Foundation</a></li>
+                        <li><i class="fas fa-globe"></i> <a href="https://www.manas.org.in" target="_blank">MANAS Foundation</a></li>
+                        <li><i class="fas fa-book"></i> <strong>Book Recommendation:</strong> "The Body Keeps the Score" by Bessel van der Kolk</li>
+                    </ul>
+                `;
+            }
+            
+            showBotMessageWithHTML(content, "resources");
+            showNavigationOptions();
+        }
 
-        // Helper functions
-        function showBotMessage(text, module) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = 'message bot-message';
-            messageDiv.innerHTML = `
-                ${text}
-                <div class="module-tag">${module.replace('-', ' ')}</div>
+        // Healing Space
+        function showHealingSpace() {
+            healingSpace.style.display = 'flex';
+            setTimeout(() => {
+                healingSpace.style.opacity = '1';
+            }, 10);
+        }
+
+        // Show random encouragement
+        function showEncouragement() {
+            const randomIndex = Math.floor(Math.random() * chatbotConfig.encouragements.length);
+            const encHTML = `
+                <div class="encouragement">
+                    <i class="fas fa-heart"></i> ${chatbotConfig.encouragements[randomIndex]}
+                </div>
             `;
-            chatContainer.appendChild(messageDiv);
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-        }
-
-        function showBotMessageWithHTML(html, module) {
+            
             const messageDiv = document.createElement('div');
             messageDiv.className = 'message bot-message';
-            messageDiv.innerHTML = html + `<div class="module-tag">${module.replace('-', ' ')}</div>`;
+            messageDiv.innerHTML = encHTML;
             chatContainer.appendChild(messageDiv);
             chatContainer.scrollTop = chatContainer.scrollHeight;
         }
 
-        function showUserMessage(text) {
+        // Typing indicator
+        function showTypingIndicator() {
+            const typingHTML = `
+                <div class="typing-indicator">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+            `;
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message bot-message';
+            messageDiv.innerHTML = typingHTML;
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+            
+            return messageDiv;
+        }
+
+        // Remove typing indicator
+        function removeTypingIndicator(indicator) {
+            if (indicator && indicator.parentNode) {
+                indicator.parentNode.removeChild(indicator);
+            }
+        }
+
+        // Send message handler
+        function sendMessage() {
+            const message = userInput.value.trim();
+            if (!message) return;
+            
+            // Clear input
+            userInput.value = "";
+            
+            // Show user message
             const messageDiv = document.createElement('div');
             messageDiv.className = 'message user-message';
-            messageDiv.textContent = text;
+            messageDiv.textContent = message;
             chatContainer.appendChild(messageDiv);
             chatContainer.scrollTop = chatContainer.scrollHeight;
-        }
-
-        function disableInput() {
-            userInput.disabled = true;
-            sendBtn.disabled = true;
-            userInput.placeholder = "Session ended - refresh to start new conversation";
+            
+            // Handle different modules
+            switch(chatbotConfig.currentModule) {
+                case "set-nickname":
+                    chatbotConfig.userNickname = message;
+                    showBotMessage(`Nice to meet you, ${message}! I'll call you that from now on. 🌸`, "personalize");
+                    setTimeout(() => {
+                        chatbotConfig.currentModule = "main-menu";
+                        showMainMenu();
+                    }, 1500);
+                    break;
+                    
+                case "vent":
+                    const typing = showTypingIndicator();
+                    setTimeout(() => {
+                        removeTypingIndicator(typing);
+                        showBotMessage("Thank you for sharing that with me. That sounds really difficult. How are you feeling now?", "vent");
+                    }, 1500);
+                    break;
+                    
+                default:
+                    const typing2 = showTypingIndicator();
+                    setTimeout(() => {
+                        removeTypingIndicator(typing2);
+                        showBotMessage("I'm here for you. Would you like to explore our resources or talk about something specific?", "response");
+                        showNavigationOptions();
+                    }, 1500);
+            }
         }
 
         // Event Listeners
@@ -680,51 +1463,70 @@
             chatContainer.innerHTML = '';
             showBotMessage("🚨 All chat history has been immediately cleared. This device shows no record of our conversation.", "panic");
             showBotMessage("Would you like to exit completely or restart a new conversation?", "panic");
-
+            
             const panicHTML = `
                 <div class="options-container">
                     <button class="option-btn" id="exit-completely">Exit Completely</button>
                     <button class="option-btn" id="restart-chat">Restart Conversation</button>
+                    <button class="option-btn" id="emergency-help">🚨 Emergency Help</button>
                 </div>
             `;
-
+            
             showBotMessageWithHTML(panicHTML, "panic");
-
+            
             document.getElementById('exit-completely').addEventListener('click', () => {
-                window.location.href = 'https://google.com'; // Redirect to safe site
+                window.location.href = 'https://google.com';
             });
-
+            
             document.getElementById('restart-chat').addEventListener('click', () => {
-                location.reload(); // Refresh page
+                location.reload();
+            });
+            
+            document.getElementById('emergency-help').addEventListener('click', () => {
+                showEmergencyOptions();
             });
         });
 
-        function sendMessage() {
-            const message = userInput.value.trim();
-            if (message === '') return;
+        // Language selector
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                chatbotConfig.language = this.getAttribute('data-lang');
+                
+                // In a real app, we would translate the interface
+                showBotMessage("Language changed. The interface will now use the selected language.", "settings");
+            });
+        });
 
-            showUserMessage(message);
-            userInput.value = '';
-
-            // Simulate bot response based on current module
+        // Healing space events
+        closeSpace.addEventListener('click', () => {
+            healingSpace.style.opacity = '0';
             setTimeout(() => {
-                switch(chatbotConfig.currentModule) {
-                    case "vent":
-                        const responses = [
-                            "That sounds incredibly difficult. Thank you for sharing that with me.",
-                            "I hear the pain in your words. You're showing such courage by expressing this.",
-                            "Your feelings are completely valid. Would you like to explore resources that might help?",
-                            "I'm holding space for what you're going through. Would you like to continue sharing?"
-                        ];
-                        showBotMessage(responses[Math.floor(Math.random() * responses.length)], "vent");
-                        break;
-                    // Other modules would have their response patterns
-                    default:
-                        showBotMessage("Thank you for sharing. Would you like to explore more options?", chatbotConfig.currentModule);
-                        showNavigationOptions();
-                }
-            }, 1000);
-        }
+                healingSpace.style.display = 'none';
+            }, 500);
+        });
+        
+        newAffirmation.addEventListener('click', () => {
+            const randomIndex = Math.floor(Math.random() * chatbotConfig.affirmations.length);
+            affirmationText.textContent = `"${chatbotConfig.affirmations[randomIndex]}"`;
+            
+            // Simulate progress increase
+            const newProgress = Math.min(100, Math.floor(Math.random() * 10) + parseInt(progressBar.style.width));
+            progressBar.style.width = `${newProgress}%`;
+            document.querySelector('.progress-text').textContent = `Healing Progress: ${newProgress}%`;
+        });
+        
+        document.getElementById('guided-meditation').addEventListener('click', () => {
+            showBotMessage("🎧 Meditation audio would play here. In a full implementation, this would connect to guided meditation resources.", "healing");
+        });
+        
+        document.getElementById('journal-here').addEventListener('click', () => {
+            showBotMessage("📝 Journaling can be a powerful healing tool. What would you like to explore today?", "journal");
+        });
+        
+        // Initialize
+        initChatbot();
     </script>
 </body>
 </html>
