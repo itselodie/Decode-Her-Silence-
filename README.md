@@ -32,6 +32,5 @@ It offers:
 Just clone this repo and open `index.html` in any browser – no setup needed!
 
 ```bash
-git clone https://github.com/itselodie/Decode-Her-Silence-.git
-cd Decode-Her-Silence-
+https://itselodie.github.io/Decode-Her-Silence-/
 ``
